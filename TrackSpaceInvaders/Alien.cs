@@ -26,11 +26,11 @@ namespace TrackSpaceInvaders
         
         public void LoadContent(ContentManager content)
         {
-
+            texture = content.Load<Texture2D>("Sprite/Aliens_Vessel");
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-
+            spriteBatch.Draw(texture, new Rectangle(Position.X, Position.Y, 100, 100), Color.White);
         }
         public void MoveRight()
         {
