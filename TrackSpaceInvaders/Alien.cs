@@ -34,11 +34,11 @@ namespace TrackSpaceInvaders
         }
         public void MoveRight()
         {
-
+            this.Position = new Point(Position.X + Convert.ToInt32(Speed.X));
         }
         public void MoveLeft()
         {
-
+            this.Position = new Point(Position.X - Convert.ToInt32(Speed.X));
         }
         public void Shoot()
         {
