@@ -79,9 +79,9 @@ namespace TrackSpaceInvaders
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             spriteBatch.Begin();
-            spriteBatch.DrawString(Content.Load<SpriteFont>("Text/TextX"), $"Valeur X : 0", new Vector2(DEFAULT_POS_X, DEFAULT_POS_X), Color.Black);
-            spriteBatch.DrawString(Content.Load<SpriteFont>("Text/TextX"), $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
-            spriteBatch.DrawString(Content.Load<SpriteFont>("Text/TextX"), $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
+            spriteBatch.DrawString(Content.Load<SpriteFont>("Text/Text"), $"Valeur X : 0", new Vector2(DEFAULT_POS_X, DEFAULT_POS_X), Color.Black);
+            spriteBatch.DrawString(Content.Load<SpriteFont>("Text/Text"), $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
+            spriteBatch.DrawString(Content.Load<SpriteFont>("Text/Text"), $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
             spriteBatch.End();
 
             // TODO: Add your drawing code here
