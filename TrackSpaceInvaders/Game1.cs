@@ -69,7 +69,6 @@ namespace TrackSpaceInvaders
 
             base.Update(gameTime);
         }
-
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
@@ -77,8 +76,10 @@ namespace TrackSpaceInvaders
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+            Texture2D Player = Content.Load<Texture2D>("Sprite/Aliens_Vessel");
+         
             spriteBatch.Begin();
+            spriteBatch.Draw(Player, new Rectangle(0, 0, 100, 100), Color.White);
             spriteBatch.DrawString(Content.Load<SpriteFont>("Text/Text"), $"Valeur X : 0", new Vector2(DEFAULT_POS_X, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(Content.Load<SpriteFont>("Text/Text"), $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(Content.Load<SpriteFont>("Text/Text"), $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
