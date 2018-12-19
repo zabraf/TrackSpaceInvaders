@@ -37,7 +37,7 @@ namespace TrackSpaceInvaders
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Rectangle(0, 0, 100, 100), Color.White);
+            spriteBatch.Draw(texture, new Rectangle(Position.X, Position.Y, 100, 100), Color.White);
         }
         public void MoveRight()
         {
@@ -45,7 +45,7 @@ namespace TrackSpaceInvaders
         }
         public void MoveLeft()
         {
-            Position = new Point(Position.X + Convert.ToInt32(Speed.X),0);
+            Position = new Point(Position.X - Convert.ToInt32(Speed.X),0);
         }
         public void Shoot()
         {
