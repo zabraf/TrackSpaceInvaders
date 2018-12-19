@@ -14,13 +14,13 @@ namespace TrackSpaceInvaders
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D player;
         SpriteFont text;
-
+        Player player;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            player = new Player(0,0);
         }
 
         /// <summary>
@@ -44,9 +44,8 @@ namespace TrackSpaceInvaders
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            player = Content.Load<Texture2D>("Sprite/Aliens_Vessel");
             text = Content.Load<SpriteFont>("Text/Text");
-
+            player.LoadContent(this.Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -83,10 +82,11 @@ namespace TrackSpaceInvaders
             
          
             spriteBatch.Begin();
-            spriteBatch.Draw(player, new Rectangle(0, 0, 100, 100), Color.White);
+            
             spriteBatch.DrawString(text, $"Valeur X : 0", new Vector2(DEFAULT_POS_X, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(text, $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(text, $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
+            player.Draw(spriteBatch);
             spriteBatch.End();
 
             // TODO: Add your drawing code here
