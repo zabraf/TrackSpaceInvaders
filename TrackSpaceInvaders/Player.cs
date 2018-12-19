@@ -12,18 +12,12 @@ namespace TrackSpaceInvaders
     class Player
     {
         Texture2D texture;
-        public int X { get; private set; }
-        public int Y { get; private set; }
-        public int Speed { get; private set; }
-        public Point Position{ get
-            {
-                return new Point(this.X, this.Y);
-            }
-            private set
-            {
-                Position = value;
-            }
-        }
+        Point _position;
+        public Vector2 Speed { get; private set; }
+
+
+        public Point Position { get => _position;private set => _position = value; }
+
         public Player(Point position):this(position.X,position.Y)
         {
 
@@ -32,15 +26,10 @@ namespace TrackSpaceInvaders
         {
 
         }
-        public Player(Point position, int speed):this(position.X,position.Y,speed)
+        public Player(Point position, float speed)
         {
-            
-        }
-        public Player(int x, int y, int speed)
-        {
-            this.X = x;
-            this.Y = y;
-            this.Speed = speed;
+            this.Position = position;
+            this.Speed = new Vector2(speed, 0);
         }
         public void LoadContent(ContentManager content)
         {
@@ -52,11 +41,11 @@ namespace TrackSpaceInvaders
         }
         public void MoveRight()
         {
-            X += Speed;
+            Position = new Point(Position.X + Convert.ToInt32(Speed.X),0);
         }
         public void MoveLeft()
         {
-            X -= Speed;
+            Position = new Point(Position.X + Convert.ToInt32(Speed.X),0);
         }
         public void Shoot()
         {
