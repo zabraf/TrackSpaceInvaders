@@ -9,6 +9,23 @@ namespace TrackSpaceInvaders
 {
     public static class TrackIR
     {
+        [DllImport("TrackIR.dll")]
+        public static extern int trackIR_X();
+        [DllImport("TrackIR.dll")]
+        public static extern int trackIR_Y();
+        [DllImport("TrackIR.dll")]
+        public static extern int trackIR_Z();
+
+        [DllImport("TrackIR.dll")]
+        public static extern int trackIR_NPStatus();
+        [DllImport("TrackIR.dll")]
+        public static extern int trackIR_Init();
+        [DllImport("TrackIR.dll")]
+        public static extern int trackIR_Update();
+        [DllImport("TrackIR.dll")]
+        public static extern int trackIR_End();
+        [DllImport("NPClient.dll")]// can't access
+        public static extern int NP_ReCenter();
         public static int X
         {
             get
@@ -30,12 +47,33 @@ namespace TrackSpaceInvaders
                 return trackIR_Z();
             }
         }
+        public static int NPStatus
+        {
+            get
+            {
+                return trackIR_NPStatus();
+            }
+        }
+        public static int Init()
+        {
 
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_X();
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_Y();
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_Z();
+            //return trackIR_Init();
+            return ReCenter;
+            //return 0;
+        }
+        public static int Update
+        {
+            get
+            {
+                return trackIR_Update();
+            }
+        }
+        public static int ReCenter
+        {
+            get
+            {
+                return NP_ReCenter();
+            }
+        }
     }
 }
