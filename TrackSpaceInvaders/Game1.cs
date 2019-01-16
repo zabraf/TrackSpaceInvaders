@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace TrackSpaceInvaders
 {
@@ -10,7 +11,8 @@ namespace TrackSpaceInvaders
     public class Game1 : Game
     {
         const int DEFAULT_POS_X = 0;
-        const int DEFAULT_POS_Y = 0;
+        const int DEFAULT_POS_Y = 350;
+        const int DEFAULT_PLAYER_SPEED = 5;
 
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
@@ -19,9 +21,10 @@ namespace TrackSpaceInvaders
         Alien alien;
         public Game1()
         {
+            this.Window.AllowAltF4 = false;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            player = new Player(0,0);
+            player = new Player(this,new Point(DEFAULT_POS_X,DEFAULT_POS_Y),DEFAULT_PLAYER_SPEED);
             alien = new Alien(new Point(0,0));
         }
 
