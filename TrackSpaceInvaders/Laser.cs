@@ -17,13 +17,16 @@ namespace TrackSpaceInvaders
     }
     class Laser
     {
+        Point _size;
         Origin _Origin;
         Texture2D _texture;
         Point _position;
         public Vector2 Speed { get; private set; }
 
 
-        public Point Position { get => _position; private set => _position = value; }
+        public Point Size { get => _size; set => _size = value; }
+        public Point Position { get => _position; set => _position = value; }
+        public Origin Origin { get => _Origin; set => _Origin = value; }
 
         public Laser(int x, int y, bool isUpDown, Origin Origin) : this(new Point(x, y), 1, isUpDown, Origin)
         {
@@ -31,7 +34,7 @@ namespace TrackSpaceInvaders
         }
         public Laser(Point position, float speed, bool isUpDown, Origin Origin)
         {
-            _Origin = Origin;
+            this.Origin = Origin;
             this.Position = position;
             if(isUpDown)
             {
@@ -41,7 +44,7 @@ namespace TrackSpaceInvaders
             {
                 this.Speed = new Vector2(0, speed);
             }
-            
+            Size = new Point(9, 36);
         }
         public void LoadContent(ContentManager content)
         {
@@ -49,7 +52,7 @@ namespace TrackSpaceInvaders
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle(Position.X, Position.Y, 9,36), Color.White);
+            spriteBatch.Draw(_texture, new Rectangle(Position.X, Position.Y, Size.X, Size.Y), Color.White);
         }
         public void Move()
         {
