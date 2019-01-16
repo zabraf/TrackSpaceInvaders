@@ -36,11 +36,14 @@ namespace TrackSpaceInvaders
         {
             spriteBatch.Draw(texture, new Rectangle(Position.X, Position.Y, 100, 57), Color.White);
         }
-        public void Move(GraphicsDeviceManager g)
+        public void MoveRight()
         {
-            int w = g.PreferredBackBufferWidth;
-            int h = g.PreferredBackBufferHeight;
+            Position = new Point(this.Position.X + Convert.ToInt32(Speed.X), this.Position.Y);
+        }
 
+        public void MoveLeft()
+        {
+            Position = new Point(this.Position.X - Convert.ToInt32(Speed.X), this.Position.Y);
         }
 
         public void Shoot()
