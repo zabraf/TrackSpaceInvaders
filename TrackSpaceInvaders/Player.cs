@@ -67,9 +67,11 @@ namespace TrackSpaceInvaders
                 Position = new Point(0, Position.Y);
             }
         }
-        public void Shoot()
+        public Laser Shoot(ContentManager content)
         {
-            
+            Laser PewPewPew = new Laser(new Point(this.Position.X + (playerSize.X/2),this.Position.Y ),1,true,Origin.Player);
+            PewPewPew.LoadContent(content);
+            return PewPewPew;
         }
     }
 }

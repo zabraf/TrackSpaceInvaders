@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace TrackSpaceInvaders
 {
@@ -20,6 +21,7 @@ namespace TrackSpaceInvaders
         Player player;
         Alien alien;
         TimeSpan timeElapsed = new TimeSpan();
+        List<Laser> lazPlayer = new List<Laser>();
         public Game1()
         {
             this.Window.AllowAltF4 = false;
@@ -53,6 +55,7 @@ namespace TrackSpaceInvaders
             text = Content.Load<SpriteFont>("Text/Text");
             player.LoadContent(this.Content);
             alien.LoadContent(this.Content);
+            //Laser.LoadContent(this.Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -82,6 +85,11 @@ namespace TrackSpaceInvaders
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 player.MoveRight();
+
+            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            {
+                lazPlayer.Add(player.Shoot(this.Content));
+            }
             // TODO: Add your update logic here
             if (timeElapsed.Milliseconds >= 2)
             {
@@ -108,6 +116,11 @@ namespace TrackSpaceInvaders
             spriteBatch.DrawString(text, $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
             player.Draw(spriteBatch);
             alien.Draw(spriteBatch);
+            foreach (Laser laz in lazPlayer)
+            {
+                laz.Draw(spriteBatch);
+                laz.Move();
+            }
             spriteBatch.End();
 
             // TODO: Add your drawing code here
