@@ -19,6 +19,7 @@ namespace TrackSpaceInvaders
         SpriteFont text;
         Player player;
         Alien alien;
+        TimeSpan timeElapsed = new TimeSpan();
         public Game1()
         {
             this.Window.AllowAltF4 = false;
@@ -71,6 +72,7 @@ namespace TrackSpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             
@@ -81,7 +83,13 @@ namespace TrackSpaceInvaders
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
                 player.MoveRight();
             // TODO: Add your update logic here
-
+            if (timeElapsed.Milliseconds >= 2)
+            {
+               
+                timeElapsed -= new TimeSpan(0,0,0,0,2);
+                alien.Move();
+            }
+            timeElapsed += gameTime.ElapsedGameTime;
             base.Update(gameTime);
         }
         /// <summary>
@@ -90,7 +98,7 @@ namespace TrackSpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             
          
             spriteBatch.Begin();
