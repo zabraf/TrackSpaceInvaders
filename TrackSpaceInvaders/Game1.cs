@@ -16,11 +16,13 @@ namespace TrackSpaceInvaders
         SpriteBatch spriteBatch;
         SpriteFont text;
         Player player;
+        Alien alien;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             player = new Player(0,0);
+            alien = new Alien(new Point(0,0));
         }
 
         /// <summary>
@@ -46,6 +48,7 @@ namespace TrackSpaceInvaders
             spriteBatch = new SpriteBatch(GraphicsDevice);
             text = Content.Load<SpriteFont>("Text/Text");
             player.LoadContent(this.Content);
+            alien.LoadContent(this.Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -93,6 +96,7 @@ namespace TrackSpaceInvaders
             spriteBatch.DrawString(text, $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(text, $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
             player.Draw(spriteBatch);
+            alien.Draw(spriteBatch);
             spriteBatch.End();
 
             // TODO: Add your drawing code here

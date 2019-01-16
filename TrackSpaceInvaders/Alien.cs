@@ -18,6 +18,10 @@ namespace TrackSpaceInvaders
 
         public Point Position { get => _position; private set => _position = value; }
 
+        public Alien(Point position) : this(position,1)
+        {
+
+        }
         public Alien(Point position,float speed)
         {
             this.Position = position;
@@ -26,12 +30,11 @@ namespace TrackSpaceInvaders
         
         public void LoadContent(ContentManager content)
         {
-
             texture = content.Load<Texture2D>("Sprite/Aliens_Vessel");
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Rectangle(Position.X, Position.Y, 100, 100), Color.White);
+            spriteBatch.Draw(texture, new Rectangle(Position.X, Position.Y, 100, 57), Color.White);
         }
         public void Move(GraphicsDeviceManager g)
         {
