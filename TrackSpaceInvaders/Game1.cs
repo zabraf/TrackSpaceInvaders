@@ -25,7 +25,7 @@ namespace TrackSpaceInvaders
         List<Laser> lazPlayer = new List<Laser>();
         Point gameSize;
 
-        int alienWaveAmount = 11;
+        int alienWaveAmount = 30;
         int shootCD;
         public Game1()
         {
@@ -35,11 +35,22 @@ namespace TrackSpaceInvaders
             gameSize = new Point(this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
             player = new Player(this,new Point(DEFAULT_POS_X,DEFAULT_POS_Y),DEFAULT_PLAYER_SPEED);
             alien = new Alien(new Point(0,0));
-            int width = gameSize.X-alien.AlienSize.X;
-            int positions = width / alienWaveAmount;
-            for (int i = 0; i < alienWaveAmount; i++)
+            int width = gameSize.X;//-alien.AlienSize.X;
+            int positions = width / (10);
+            int alienY = default(int);
+            int alienDirection = 1;// true = right
+
+            for (int i = 0, j = 0; i < alienWaveAmount; i++, j++)
             {
-                aliens.Add(new Alien(new Point(positions * i, 0)));
+                if (j/10 == 1)
+                {
+                    alienY = i/10*alien.AlienSize.Y;
+                    alienDirection *= -1;
+                    j = 0;
+                }
+                Alien a = new Alien(new Point(positions * j, alienY), alienDirection);
+                //a.Speed.X *= alienDirection;
+                aliens.Add(a);
                 
 
             }
