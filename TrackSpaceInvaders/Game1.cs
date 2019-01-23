@@ -18,42 +18,23 @@ namespace TrackSpaceInvaders
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont text;
-        Player player;
-        Alien alien;
+        List<Player> players = new List<Player>();
+        //Alien alien;
         List<Alien> aliens = new List<Alien>();
         TimeSpan timeElapsed = new TimeSpan();
         List<Laser> lazPlayer = new List<Laser>();
-        Point gameSize;
+        //Point gameSize;
 
-        int alienWaveAmount = 30;
+        bool spawnDone = false;
+        int alienPreWaveAmount = 40;// amount of enemies that will pre-spawn
         int shootCD;
+        int gameWidth = DEFAULT_POS_X;
         public Game1()
         {
             this.Window.AllowAltF4 = false;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            gameSize = new Point(this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
-            player = new Player(this,new Point(DEFAULT_POS_X,DEFAULT_POS_Y),DEFAULT_PLAYER_SPEED);
-            alien = new Alien(new Point(0,0));
-            int width = gameSize.X-alien.AlienSize.X;
-            int positions = width / 10;
-            int alienY = default(int);
-            int alienDirection = 1;// true = right
-
-            for (int i = 0, j = 0; i < alienWaveAmount; i++, j++)
-            {
-                if (j/10 == 1)
-                {
-                    alienY = i/10*alien.AlienSize.Y;
-                    alienDirection *= -1;
-                    j = 0;
-                }
-                Alien a = new Alien(new Point(positions * j, alienY), alienDirection);
-                //a.Speed.X *= alienDirection;
-                aliens.Add(a);
-                
-
-            }
+            gameWidth = this.Window.ClientBounds.Width;
         }
 
         /// <summary>
@@ -78,7 +59,10 @@ namespace TrackSpaceInvaders
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             text = Content.Load<SpriteFont>("Text/Text");
-            player.LoadContent(this.Content);
+            foreach (Player p in players)
+            {
+                p.LoadContent(this.Content);
+            }
             foreach (Alien a in aliens)
             {
                 a.LoadContent(this.Content);
@@ -109,17 +93,31 @@ namespace TrackSpaceInvaders
 
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
-                player.MoveLeft();
+            {
+                foreach (Player p in players)
+                {
+                    p.MoveLeft();
+                }
+            }
+
 
             if (Keyboard.GetState().IsKeyDown(Keys.Right))
-                player.MoveRight();
+            {
+                foreach (Player p in players)
+                {
+                    p.MoveRight();
+                }
+            }
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
 
                 if (shootCD>=1000)
                 {
-                    lazPlayer.Add(player.Shoot(this.Content));
+                    foreach (Player p in players)
+                    {
+                        lazPlayer.Add(p.Shoot(this.Content));
+                    }
                     shootCD = 0;
                 }
             }
@@ -132,9 +130,30 @@ namespace TrackSpaceInvaders
                 {
                     a.Move();
                 }
+                if (alienPreWaveAmount != aliens.Count && !spawnDone)
+                {
+                    Alien a = new Alien(new Point(0, 0));
+                    a.LoadContent(this.Content);
+                    aliens.Add(a);
+                    for (int i = 0; i < aliens.Count*70; i++)
+                    {
+                        a.Move();
+                    }
+                    if (alienPreWaveAmount == aliens.Count)
+                    {
+                        Player p = new Player(this, new Point(gameWidth/2-new Player(this,0,0).PlayerSize.X/2, DEFAULT_POS_Y), DEFAULT_PLAYER_SPEED);
+                        players.Add(p);
+                        p.LoadContent(this.Content);
+                        spawnDone = true;
+                    }
+                }
             }
             timeElapsed += gameTime.ElapsedGameTime;
             base.Update(gameTime);
+
+            //alien = new Alien(new Point(0,0));
+
+            
         }
         /// <summary>
         /// This is called when the game should draw itself.
@@ -150,7 +169,10 @@ namespace TrackSpaceInvaders
             spriteBatch.DrawString(text, $"Valeur X : 0", new Vector2(DEFAULT_POS_X, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(text, $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(text, $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
-            player.Draw(spriteBatch);
+            foreach (Player p in players)
+            {
+                p.Draw(spriteBatch);
+            }
             foreach (Alien a in aliens)
             {
                 a.Draw(spriteBatch);
