@@ -22,6 +22,7 @@ namespace TrackSpaceInvaders
         Alien alien;
         TimeSpan timeElapsed = new TimeSpan();
         List<Laser> lazPlayer = new List<Laser>();
+        int shootCD;
         public Game1()
         {
             this.Window.AllowAltF4 = false;
@@ -75,10 +76,10 @@ namespace TrackSpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
+            shootCD += gameTime.ElapsedGameTime.Milliseconds;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-            
+
 
             if (Keyboard.GetState().IsKeyDown(Keys.Left))
                 player.MoveLeft();
@@ -88,12 +89,16 @@ namespace TrackSpaceInvaders
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-                lazPlayer.Add(player.Shoot(this.Content));
+
+                if (shootCD>=1000)
+                {
+                    lazPlayer.Add(player.Shoot(this.Content));
+                    shootCD -= 1000;
+                }
             }
             // TODO: Add your update logic here
             if (timeElapsed.Milliseconds >= 2)
             {
-               
                 timeElapsed -= new TimeSpan(0,0,0,0,2);
                 alien.Move();
             }

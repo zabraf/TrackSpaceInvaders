@@ -20,6 +20,7 @@ namespace TrackSpaceInvaders
 
 
         public Point Position { get => _position; private set => _position = value; }
+        public Point PlayerSize { get => playerSize; set => playerSize = value; }
 
         public Player(Game1 game, int x,int y):this(game, new Point(x,y),1)
         {
@@ -43,17 +44,17 @@ namespace TrackSpaceInvaders
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, new Rectangle(Position.X, Position.Y, playerSize.X, playerSize.Y), Color.White);
+            spriteBatch.Draw(texture, new Rectangle(Position.X, Position.Y, PlayerSize.X, PlayerSize.Y), Color.White);
         }
         public void MoveRight()
         {   
-            if ((Position.X+playerSize.X) < gameSize.X)
+            if ((Position.X+PlayerSize.X) < gameSize.X)
             {
                 Position = new Point(Position.X + Convert.ToInt32(Speed.X),Position.Y);
             }
             else
             {
-                Position = new Point(gameSize.X-playerSize.X, Position.Y);
+                Position = new Point(gameSize.X-PlayerSize.X, Position.Y);
             }
         }
         public void MoveLeft()
@@ -69,7 +70,8 @@ namespace TrackSpaceInvaders
         }
         public Laser Shoot(ContentManager content)
         {
-            Laser PewPewPew = new Laser(new Point(this.Position.X + (playerSize.X/2),this.Position.Y ),1,true,Origin.Player);
+            Laser PewPewPew = new Laser(new Point(this.Position.X + (PlayerSize.X/2),this.Position.Y ),12,true,Origin.Player);
+            PewPewPew.Position = new Point(PewPewPew.Position.X - PewPewPew.Size.X / 2, PewPewPew.Position.Y);
             PewPewPew.LoadContent(content);
             return PewPewPew;
         }

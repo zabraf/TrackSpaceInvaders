@@ -28,6 +28,7 @@ namespace TrackSpaceInvaders
         public Point Position { get => _position; set => _position = value; }
         public Origin Origin { get => _Origin; set => _Origin = value; }
 
+
         public Laser(int x, int y, bool isUpDown, Origin Origin) : this(new Point(x, y), 1, isUpDown, Origin)
         {
 
@@ -57,7 +58,6 @@ namespace TrackSpaceInvaders
         public void Move()
         {
                 Position = new Point(Position.X, Position.Y + Convert.ToInt32(Speed.Y));
-
         }
     }
 }
