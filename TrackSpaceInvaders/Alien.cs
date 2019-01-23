@@ -14,7 +14,7 @@ namespace TrackSpaceInvaders
         Texture2D texture;
         Game game = new Game();
         Point _position;
-        Point _alienSize = new Point(100, 57);
+        Point _alienSize = new Point(66, 49);
         public Vector2 Speed { get; private set; }
 
 
