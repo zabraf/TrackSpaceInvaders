@@ -47,11 +47,13 @@ namespace TrackSpaceInvaders
             {
                 this.Down();
                 Speed = -Speed;
+                this._position.X = game.Window.ClientBounds.Width - AlienSize.X;
             }
             if (this.Position.X <= 0)
             {
                 this.Down();
                 Speed = -Speed;
+                this._position.X = 0;
             }
 
         }

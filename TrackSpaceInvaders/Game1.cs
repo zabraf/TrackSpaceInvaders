@@ -35,8 +35,8 @@ namespace TrackSpaceInvaders
             gameSize = new Point(this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
             player = new Player(this,new Point(DEFAULT_POS_X,DEFAULT_POS_Y),DEFAULT_PLAYER_SPEED);
             alien = new Alien(new Point(0,0));
-            int width = gameSize.X;//-alien.AlienSize.X;
-            int positions = width / (10);
+            int width = gameSize.X-alien.AlienSize.X;
+            int positions = width / 10;
             int alienY = default(int);
             int alienDirection = 1;// true = right
 
@@ -79,7 +79,6 @@ namespace TrackSpaceInvaders
             spriteBatch = new SpriteBatch(GraphicsDevice);
             text = Content.Load<SpriteFont>("Text/Text");
             player.LoadContent(this.Content);
-            alien.LoadContent(this.Content);
             foreach (Alien a in aliens)
             {
                 a.LoadContent(this.Content);
@@ -128,7 +127,7 @@ namespace TrackSpaceInvaders
             if (timeElapsed.Milliseconds >= 2)
             {
                 timeElapsed -= new TimeSpan(0,0,0,0,2);
-                alien.Move();
+                Laser.CheckLaz(lazPlayer, aliens);
                 foreach (Alien a in aliens)
                 {
                     a.Move();
@@ -152,7 +151,6 @@ namespace TrackSpaceInvaders
             spriteBatch.DrawString(text, $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
             spriteBatch.DrawString(text, $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
             player.Draw(spriteBatch);
-            alien.Draw(spriteBatch);
             foreach (Alien a in aliens)
             {
                 a.Draw(spriteBatch);
