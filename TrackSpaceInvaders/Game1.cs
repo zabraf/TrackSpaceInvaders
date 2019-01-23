@@ -20,16 +20,29 @@ namespace TrackSpaceInvaders
         SpriteFont text;
         Player player;
         Alien alien;
+        List<Alien> aliens = new List<Alien>();
         TimeSpan timeElapsed = new TimeSpan();
         List<Laser> lazPlayer = new List<Laser>();
+        Point gameSize;
+
+        int alienWaveAmount = 11;
         int shootCD;
         public Game1()
         {
             this.Window.AllowAltF4 = false;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            gameSize = new Point(this.Window.ClientBounds.Width, this.Window.ClientBounds.Height);
             player = new Player(this,new Point(DEFAULT_POS_X,DEFAULT_POS_Y),DEFAULT_PLAYER_SPEED);
             alien = new Alien(new Point(0,0));
+            int width = gameSize.X-alien.AlienSize.X;
+            int positions = width / alienWaveAmount;
+            for (int i = 0; i < alienWaveAmount; i++)
+            {
+                aliens.Add(new Alien(new Point(positions * i, 0)));
+                
+
+            }
         }
 
         /// <summary>
@@ -56,6 +69,10 @@ namespace TrackSpaceInvaders
             text = Content.Load<SpriteFont>("Text/Text");
             player.LoadContent(this.Content);
             alien.LoadContent(this.Content);
+            foreach (Alien a in aliens)
+            {
+                a.LoadContent(this.Content);
+            }
             //Laser.LoadContent(this.Content);
             // TODO: use this.Content to load your game content here
         }
@@ -93,7 +110,7 @@ namespace TrackSpaceInvaders
                 if (shootCD>=1000)
                 {
                     lazPlayer.Add(player.Shoot(this.Content));
-                    shootCD -= 1000;
+                    shootCD = 0;
                 }
             }
             // TODO: Add your update logic here
@@ -101,6 +118,10 @@ namespace TrackSpaceInvaders
             {
                 timeElapsed -= new TimeSpan(0,0,0,0,2);
                 alien.Move();
+                foreach (Alien a in aliens)
+                {
+                    a.Move();
+                }
             }
             timeElapsed += gameTime.ElapsedGameTime;
             base.Update(gameTime);
@@ -121,6 +142,10 @@ namespace TrackSpaceInvaders
             spriteBatch.DrawString(text, $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
             player.Draw(spriteBatch);
             alien.Draw(spriteBatch);
+            foreach (Alien a in aliens)
+            {
+                a.Draw(spriteBatch);
+            }
             foreach (Laser laz in lazPlayer)
             {
                 laz.Draw(spriteBatch);
