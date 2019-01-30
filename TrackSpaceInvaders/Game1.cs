@@ -126,6 +126,7 @@ namespace TrackSpaceInvaders
             {
                 timeElapsed -= new TimeSpan(0,0,0,0,2);
                 Laser.CheckLaz(lazPlayer, aliens);
+                Alien.CheckPlayer(players, aliens);
                 foreach (Alien a in aliens)
                 {
                     a.Move();
@@ -141,7 +142,7 @@ namespace TrackSpaceInvaders
                     }
                     if (alienPreWaveAmount == aliens.Count)
                     {
-                        Player p = new Player(this, new Point(gameWidth/2-new Player(this,0,0).PlayerSize.X/2, DEFAULT_POS_Y), DEFAULT_PLAYER_SPEED);
+                        Player p = new Player(this, new Point(gameWidth/2-new Player(this,0,0).Size.X/2, DEFAULT_POS_Y), DEFAULT_PLAYER_SPEED);
                         players.Add(p);
                         p.LoadContent(this.Content);
                         spawnDone = true;
@@ -151,9 +152,25 @@ namespace TrackSpaceInvaders
             timeElapsed += gameTime.ElapsedGameTime;
             base.Update(gameTime);
 
+            if (aliens.Count == 0 && spawnDone)// if no more aliens alive and the spawn is done
+            {
+                Win();
+            }
+            if (players.Count == 0 && spawnDone)// if no more players alive and the spawn is done
+            {
+                Lose();
+            }
             //alien = new Alien(new Point(0,0));
 
-            
+
+        }
+        private void Win()
+        {
+            Exit();
+        }
+        private void Lose()
+        {
+            Exit();
         }
         /// <summary>
         /// This is called when the game should draw itself.

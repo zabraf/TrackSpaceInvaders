@@ -18,7 +18,7 @@ namespace TrackSpaceInvaders
     class Laser
     {
         Point _size;
-        Origin _Origin;
+        Origin _origin;
         Texture2D _texture;
         Point _position;
         public Vector2 Speed { get; private set; }
@@ -26,7 +26,7 @@ namespace TrackSpaceInvaders
 
         public Point Size { get => _size; set => _size = value; }
         public Point Position { get => _position; set => _position = value; }
-        public Origin Origin { get => _Origin; set => _Origin = value; }
+        public Origin Origin { get => _origin; set => _origin = value; }
 
 
         public Laser(int x, int y, bool isUpDown, Origin Origin) : this(new Point(x, y), 1, isUpDown, Origin)
@@ -68,7 +68,7 @@ namespace TrackSpaceInvaders
             {
                 for (int j = 0; j < aliens.Count; j++)
                 {
-                    if (new Rectangle(listLaz[i].Position, listLaz[i].Size).Intersects(new Rectangle(aliens[j].Position, aliens[j].AlienSize)))
+                    if (new Rectangle(listLaz[i].Position, listLaz[i].Size).Intersects(new Rectangle(aliens[j].Position, aliens[j].Size)))
                     {
                         listLaz.RemoveAt(i);
                         aliens.RemoveAt(j);
@@ -87,7 +87,7 @@ namespace TrackSpaceInvaders
             {
                 foreach (Alien alien in aliens)
                 {
-                    if (new Rectangle(laz.Position,laz.Size).Intersects(new Rectangle(alien.Position,alien.AlienSize)))
+                    if (new Rectangle(laz.Position,laz.Size).Intersects(new Rectangle(alien.Position,alien.Size)))
                     {
                         
                     }
