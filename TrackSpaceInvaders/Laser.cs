@@ -79,20 +79,6 @@ namespace TrackSpaceInvaders
                     }
                 }
             }
-
-
-
-
-            foreach (Laser laz in listLaz)
-            {
-                foreach (Alien alien in aliens)
-                {
-                    if (new Rectangle(laz.Position,laz.Size).Intersects(new Rectangle(alien.Position,alien.Size)))
-                    {
-                        
-                    }
-                }
-            }
         }
     }
 }

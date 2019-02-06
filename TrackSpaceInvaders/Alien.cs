@@ -77,20 +77,6 @@ namespace TrackSpaceInvaders
                     }
                 }
             }
-
-
-
-
-            foreach (Player player in players)
-            {
-                foreach (Alien alien in aliens)
-                {
-                    if (new Rectangle(player.Position, player.Size).Intersects(new Rectangle(alien.Position, alien.Size)))
-                    {
-
-                    }
-                }
-            }
         }
         public void Down()
         {
