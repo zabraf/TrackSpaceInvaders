@@ -3,6 +3,9 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using ButtonState = Microsoft.Xna.Framework.Input.ButtonState;
+using Keys = Microsoft.Xna.Framework.Input.Keys;
 
 namespace TrackSpaceInvaders
 {
@@ -14,7 +17,7 @@ namespace TrackSpaceInvaders
         const int DEFAULT_POS_X = 0;
         const int DEFAULT_POS_Y = 350;
         const int DEFAULT_PLAYER_SPEED = 5;
-
+        private const int COOLDOWN_SHOT = 1000;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont text;
@@ -26,7 +29,7 @@ namespace TrackSpaceInvaders
         //Point gameSize;
 
         bool spawnDone = false;
-        int alienPreWaveAmount = 40;// amount of enemies that will pre-spawn
+        int alienPreWaveAmount = 60;// amount of enemies that will pre-spawn 40
         int shootCD;
         int gameWidth = DEFAULT_POS_X;
         public Game1()
@@ -87,6 +90,14 @@ namespace TrackSpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            if (aliens.Count == 0 && spawnDone)// if no more aliens alive and the spawn is done
+            {
+                Win();
+            }
+            if (players.Count == 0 && spawnDone)// if no more players alive and the spawn is done
+            {
+                Lose();
+            }
             shootCD += gameTime.ElapsedGameTime.Milliseconds;
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
@@ -112,7 +123,7 @@ namespace TrackSpaceInvaders
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
 
-                if (shootCD>=1000)
+                if (shootCD>= COOLDOWN_SHOT)
                 {
                     foreach (Player p in players)
                     {
@@ -151,26 +162,36 @@ namespace TrackSpaceInvaders
             }
             timeElapsed += gameTime.ElapsedGameTime;
             base.Update(gameTime);
-
-            if (aliens.Count == 0 && spawnDone)// if no more aliens alive and the spawn is done
-            {
-                Win();
-            }
-            if (players.Count == 0 && spawnDone)// if no more players alive and the spawn is done
-            {
-                Lose();
-            }
             //alien = new Alien(new Point(0,0));
 
 
         }
         private void Win()
         {
-            Exit();
+
+            if (System.Windows.Forms.MessageBox.Show("Voulez-vous recommencez le jeu ?", "Gagné", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                Exit();
+            }
+            else
+                Application.Restart();
+
+            //this.graphics.GraphicsDevice.Clear(Color.Black);
+            //this.spriteBatch.Draw(new Texture2D(this.GraphicsDevice, 10, 10), new Rectangle(), Color.White);
+            //Thread.Sleep(10000);
+            //Exit();
         }
         private void Lose()
         {
-            Exit();
+            //this.graphics.GraphicsDevice.Clear(Color.Black);
+            //this.spriteBatch.Draw(new Texture2D(this.GraphicsDevice, 10, 10), new Rectangle(), Color.White);
+            if (System.Windows.Forms.MessageBox.Show("Voulez-vous recommencez le jeu ?", "Echec", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                Exit();
+            }
+            else
+                Application.Restart();
+            //Thread.Sleep(10000);
         }
         /// <summary>
         /// This is called when the game should draw itself.
@@ -201,9 +222,12 @@ namespace TrackSpaceInvaders
             }
             spriteBatch.End();
 
+            
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+            
+
         }
     }
 }
