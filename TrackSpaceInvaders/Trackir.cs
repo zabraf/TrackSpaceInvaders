@@ -1,79 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace TrackSpaceInvaders
 {
     public static class TrackIR
     {
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_X();
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_Y();
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_Z();
+        private static string _path = @"C:\Users\Administrateur\Desktop\test.txt";
+        private static Timer _aTimer;
+        private static int x = 0;
+        private static int y = 0;
+        public static void Init()
+        {
+            // Create a timer with a two second interval.
+            _aTimer = new Timer(50);
+            // Hook up the Elapsed event for the timer. 
+            _aTimer.Elapsed += ReadTrackIRData;
+            _aTimer.AutoReset = true;
+            _aTimer.Enabled = true;
+        }
 
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_NPStatus();
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_Init();
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_Update();
-        [DllImport("TrackIR.dll")]
-        public static extern int trackIR_End();
-        [DllImport("NPClient.dll")]// can't access
-        public static extern int NP_ReCenter();
-        public static int X
-        {
-            get
-            {
-                return trackIR_X();
-            }
-        }
-        public static int Y
-        {
-            get
-            {
-                return trackIR_Y();
-            }
-        }
-        public static int Z
-        {
-            get
-            {
-                return trackIR_Z();
-            }
-        }
-        public static int NPStatus
-        {
-            get
-            {
-                return trackIR_NPStatus();
-            }
-        }
-        public static int Init()
-        {
+        static string[] lines;
 
-            //return trackIR_Init();
-            return ReCenter;
-            //return 0;
-        }
-        public static int Update
+        public static int X { get => x; }
+        public static int Y { get => y; }
+
+        private static void ReadTrackIRData(object sender, ElapsedEventArgs e)
         {
-            get
+            try
             {
-                return trackIR_Update();
+                string table;
+                using (StreamReader sr = new StreamReader(_path))
+                {
+                   table  = sr.ReadToEnd();
+                    sr.Close();
+                }
+                lines = table.Split(',');
+                Int32.TryParse(lines[0],out x);
+                Int32.TryParse(lines[1],out y);
             }
-        }
-        public static int ReCenter
-        {
-            get
+            catch
             {
-                return NP_ReCenter();
+
             }
+            
         }
     }
 }

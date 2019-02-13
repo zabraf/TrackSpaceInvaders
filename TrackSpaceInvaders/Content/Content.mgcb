@@ -49,10 +49,3 @@
 /processorParam:TextureFormat=Color
 /build:Sprite/Player_Vessel.png
 
-#begin Text/Text.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Text/Text.spritefont
-

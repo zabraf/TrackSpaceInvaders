@@ -18,10 +18,9 @@ namespace TrackSpaceInvaders
         const int DEFAULT_POS_Y = 350;
         const int DEFAULT_PLAYER_SPEED = 5;
         private const int COOLDOWN_SHOT = 1000;
-        private const int COOLDOWN_SHOT_ALIEN = 3500;
+        private const int COOLDOWN_SHOT_ALIEN = 350;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        SpriteFont text;
         List<Player> players = new List<Player>();
         //Alien alien;
         List<Alien> aliens = new List<Alien>();
@@ -42,6 +41,7 @@ namespace TrackSpaceInvaders
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             gameWidth = this.Window.ClientBounds.Width;
+            TrackIR.Init();
         }
 
         /// <summary>
@@ -65,7 +65,6 @@ namespace TrackSpaceInvaders
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            text = Content.Load<SpriteFont>("Text/Text");
             foreach (Player p in players)
             {
                 p.LoadContent(this.Content);
@@ -117,7 +116,7 @@ namespace TrackSpaceInvaders
                 Exit();
 
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) || TrackIR.X > 400)
             {
                 foreach (Player p in players)
                 {
@@ -126,7 +125,7 @@ namespace TrackSpaceInvaders
             }
 
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) || TrackIR.X < -400)
             {
                 foreach (Player p in players)
                 {
@@ -134,7 +133,7 @@ namespace TrackSpaceInvaders
                 }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space))
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) || TrackIR.Y < -300)
             {
                 if (shootCD>= COOLDOWN_SHOT)
                 {
@@ -218,10 +217,6 @@ namespace TrackSpaceInvaders
             
          
             spriteBatch.Begin();
-            
-            spriteBatch.DrawString(text, $"Valeur X : 0", new Vector2(DEFAULT_POS_X, DEFAULT_POS_X), Color.Black);
-            spriteBatch.DrawString(text, $"Valeur Y : 0", new Vector2(DEFAULT_POS_X + 100, DEFAULT_POS_X), Color.Black);
-            spriteBatch.DrawString(text, $"Valeur Z : 0", new Vector2(DEFAULT_POS_X + 200, DEFAULT_POS_X), Color.Black);
             foreach (Player p in players)
             {
                 p.Draw(spriteBatch);

@@ -14,8 +14,10 @@ namespace TrackSpaceInvaders
         Game _game;
         Texture2D _texture;
         Point _gameSize;
-        Point _size = new Point(100, 115);
+        Point _size = new Point(90, 115);
         Point _position;
+        private int testtxt = 0;
+
         public Vector2 Speed { get; private set; }
 
 
@@ -68,7 +70,24 @@ namespace TrackSpaceInvaders
                 Position = new Point(0, Position.Y);
             }
         }
-        
+        // TrackIR
+        public void Move()
+        {
+            Position = new Point(Position.X + testtxt, Position.Y);
+            if (Position.X < 0)
+            {
+                Position = new Point(0, Position.Y);
+            }
+            else if((Position.X + Size.X) > _gameSize.X)
+            {
+                Position = new Point((Position.X + Size.X), Position.Y);
+            }
+            else
+            {
+                // ?
+            }
+        }
+
 
         public Laser Shoot(ContentManager content)
         {
