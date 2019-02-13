@@ -18,6 +18,7 @@ namespace TrackSpaceInvaders
         const int DEFAULT_POS_Y = 350;
         const int DEFAULT_PLAYER_SPEED = 5;
         private const int COOLDOWN_SHOT = 1000;
+        private const int COOLDOWN_SHOT_ALIEN = 3500;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         SpriteFont text;
@@ -26,11 +27,14 @@ namespace TrackSpaceInvaders
         List<Alien> aliens = new List<Alien>();
         TimeSpan timeElapsed = new TimeSpan();
         List<Laser> lazPlayer = new List<Laser>();
+        List<Laser> lazAliens = new List<Laser>();
+        static Random rnd = new Random();
         //Point gameSize;
 
         bool spawnDone = false;
-        int alienPreWaveAmount = 60;// amount of enemies that will pre-spawn 40
+        int alienPreWaveAmount = 30;// amount of enemies that will pre-spawn 40
         int shootCD;
+        int AliensShootCD;
         int gameWidth = DEFAULT_POS_X;
         public Game1()
         {
@@ -99,6 +103,16 @@ namespace TrackSpaceInvaders
                 Lose();
             }
             shootCD += gameTime.ElapsedGameTime.Milliseconds;
+            AliensShootCD += gameTime.ElapsedGameTime.Milliseconds;
+            
+
+            if (AliensShootCD >= COOLDOWN_SHOT_ALIEN + rnd.Next((COOLDOWN_SHOT_ALIEN / 100) * 1, (COOLDOWN_SHOT_ALIEN / 100) * 40))
+            {
+                Console.WriteLine(AliensShootCD);
+                lazAliens.Add(aliens[rnd.Next(0, aliens.Count)].Shoot(this.Content));
+                AliensShootCD = 0;
+            }
+
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
@@ -122,13 +136,13 @@ namespace TrackSpaceInvaders
 
             if (Keyboard.GetState().IsKeyDown(Keys.Space))
             {
-
                 if (shootCD>= COOLDOWN_SHOT)
                 {
                     foreach (Player p in players)
                     {
                         lazPlayer.Add(p.Shoot(this.Content));
                     }
+                    
                     shootCD = 0;
                 }
             }
@@ -136,7 +150,8 @@ namespace TrackSpaceInvaders
             if (timeElapsed.Milliseconds >= 2)
             {
                 timeElapsed -= new TimeSpan(0,0,0,0,2);
-                Laser.CheckLaz(lazPlayer, aliens);
+                Laser.CheckLazPlayer(lazPlayer, aliens);
+                Laser.CheckLazAliens(lazAliens, players);
                 Alien.CheckPlayer(players, aliens);
                 foreach (Alien a in aliens)
                 {
@@ -216,6 +231,11 @@ namespace TrackSpaceInvaders
                 a.Draw(spriteBatch);
             }
             foreach (Laser laz in lazPlayer)
+            {
+                laz.Draw(spriteBatch);
+                laz.Move();
+            }
+            foreach (Laser laz in lazAliens)
             {
                 laz.Draw(spriteBatch);
                 laz.Move();

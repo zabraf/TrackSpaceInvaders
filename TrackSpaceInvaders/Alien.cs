@@ -83,9 +83,12 @@ namespace TrackSpaceInvaders
             Position = new Point(this.Position.X, this.Position.Y + Size.Y);
         }
         
-        public void Shoot()
+        public Laser Shoot(ContentManager content)
         {
-
+            Laser alienLaz = new Laser(new Point(this.Position.X + (Size.X / 2), this.Position.Y), 7, false, Origin.Alien);
+            alienLaz.Position = new Point(alienLaz.Position.X - alienLaz.Size.X / 2, alienLaz.Position.Y);
+            alienLaz.LoadContent(content);
+            return alienLaz;
         }
     }
 }

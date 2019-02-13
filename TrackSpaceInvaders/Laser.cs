@@ -60,7 +60,7 @@ namespace TrackSpaceInvaders
                 Position = new Point(Position.X, Position.Y + Convert.ToInt32(Speed.Y));
         }
 
-        public static  void CheckLaz(List<Laser> listLaz,List<Alien> aliens)
+        public static  void CheckLazPlayer(List<Laser> listLaz,List<Alien> aliens)
         {
 
 
@@ -80,5 +80,29 @@ namespace TrackSpaceInvaders
                 }
             }
         }
+
+
+        public static void CheckLazAliens(List<Laser> listLaz, List<Player> players)
+        {
+
+
+            for (int i = 0; i < listLaz.Count; i++)
+            {
+                for (int j = 0; j < players.Count; j++)
+                {
+                    if (new Rectangle(listLaz[i].Position, listLaz[i].Size).Intersects(new Rectangle(players[j].Position, players[j].Size)))
+                    {
+                        listLaz.RemoveAt(i);
+                        players.RemoveAt(j);
+                        i -= 1;
+                        j -= 1;
+                        break;
+                    }
+                }
+            }
+        }
+
+
+
     }
 }
