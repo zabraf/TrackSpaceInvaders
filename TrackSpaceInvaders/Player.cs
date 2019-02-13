@@ -14,7 +14,7 @@ namespace TrackSpaceInvaders
         Game _game;
         Texture2D _texture;
         Point _gameSize;
-        Point _size = new Point(90, 115);
+        Point _size = new Point(75, 75);
         Point _position;
         private int testtxt = 0;
 
