@@ -24,14 +24,31 @@ namespace TrackSpaceInvaders
         public Point Position { get => _position; private set => _position = value; }
         public Point Size { get => _size; set => _size = value; }
 
+        /// <summary>
+        /// Player constructor with the game, x and y starting position as parameters
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
         public Player(Game1 game, int x,int y):this(game, new Point(x,y),1)
         {
 
         }
+        /// <summary>
+        /// Player constructor with the game and starting position as parameters
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="position"></param>
         public Player(Game1 game, Point position):this(game, position.X,position.Y)
         {
 
         }
+        /// <summary>
+        /// Player constructor with the game, starting position and the player speed as parameters
+        /// </summary>
+        /// <param name="game"></param>
+        /// <param name="position"></param>
+        /// <param name="speed"></param>
         public Player(Game1 game, Point position, float speed)
         {
             this.Position = position;
@@ -40,14 +57,25 @@ namespace TrackSpaceInvaders
             _game = game;
             _gameSize = new Point(_game.Window.ClientBounds.Width, _game.Window.ClientBounds.Height);
         }
+        /// <summary>
+        /// Loads the player sprite
+        /// </summary>
+        /// <param name="content"></param>
         public void LoadContent(ContentManager content)
         {
             _texture = content.Load<Texture2D>("Sprite/Player_Vessel");
         }
+        /// <summary>
+        /// Draws the player on the game on his x and y position
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(_texture, new Rectangle(Position.X, Position.Y, Size.X, Size.Y), Color.White);
         }
+        /// <summary>
+        /// Moves the player to the right until he reaches the max position
+        /// </summary>
         public void MoveRight()
         {   
             if ((Position.X+Size.X) < _gameSize.X)
@@ -59,6 +87,9 @@ namespace TrackSpaceInvaders
                 Position = new Point(_gameSize.X-Size.X, Position.Y);
             }
         }
+        /// <summary>
+        /// Moves the player to the right until he reaches the max position
+        /// </summary>
         public void MoveLeft()
         {
             if (Position.X > 0)
@@ -89,12 +120,17 @@ namespace TrackSpaceInvaders
         }
 
 
+        /// <summary>
+        /// shoots a laser at the center of the player
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
         public Laser Shoot(ContentManager content)
         {
-            Laser PewPewPew = new Laser(new Point(this.Position.X + (Size.X/2),this.Position.Y ),12,true,Origin.Player);
-            PewPewPew.Position = new Point(PewPewPew.Position.X - PewPewPew.Size.X / 2, PewPewPew.Position.Y);
-            PewPewPew.LoadContent(content);
-            return PewPewPew;
+            Laser laser = new Laser(new Point(this.Position.X + (Size.X/2),this.Position.Y ),12,true,Origin.Player);
+            laser.Position = new Point(laser.Position.X - laser.Size.X / 2, laser.Position.Y);
+            laser.LoadContent(content);
+            return laser;
         }
     }
 }

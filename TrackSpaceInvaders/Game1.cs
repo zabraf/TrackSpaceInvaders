@@ -18,7 +18,7 @@ namespace TrackSpaceInvaders
         const int DEFAULT_POS_Y = 350;
         const int DEFAULT_PLAYER_SPEED = 5;
         private const int COOLDOWN_SHOT = 1000;
-        private const int COOLDOWN_SHOT_ALIEN = 350;
+        private const int COOLDOWN_SHOT_ALIEN = 3500;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         List<Player> players = new List<Player>();
