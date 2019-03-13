@@ -1,4 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* 
+ * Project : TrackSpaceInvaders
+ * Authors : Fabian Troller / Guntram Juling / Raphaël Lopes
+ * Description : Space invaders controlled with head tracking(TrackIR) technology
+ * File : Laser.cs
+ * Date : 13.03.19
+ */
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;

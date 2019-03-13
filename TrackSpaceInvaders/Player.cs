@@ -1,4 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* 
+ * Project : TrackSpaceInvaders
+ * Authors : Fabian Troller / Guntram Juling / Raphaël Lopes
+ * Description : Space invaders controlled with head tracking(TrackIR) technology
+ * File : Player.cs
+ * Date : 13.03.19
+ */
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,7 +21,6 @@ namespace TrackSpaceInvaders
         Game _game;
         Texture2D _texture;
         Point _gameSize;
-        //Point _size = new Point(75, 75);
         Point _size = new Point(75, 120);
         Point _position;
         private int testtxt = 0;
@@ -102,7 +108,9 @@ namespace TrackSpaceInvaders
                 Position = new Point(0, Position.Y);
             }
         }
-        // TrackIR
+        /// <summary>
+        /// Moves the player with Trackir Technology
+        /// </summary>
         public void Move()
         {
             Position = new Point(Position.X + testtxt, Position.Y);
@@ -114,15 +122,11 @@ namespace TrackSpaceInvaders
             {
                 Position = new Point((Position.X + Size.X), Position.Y);
             }
-            else
-            {
-                // ?
-            }
         }
 
 
         /// <summary>
-        /// shoots a laser at the center of the player
+        /// Shoots a laser at the center of the player
         /// </summary>
         /// <param name="content"></param>
         /// <returns></returns>

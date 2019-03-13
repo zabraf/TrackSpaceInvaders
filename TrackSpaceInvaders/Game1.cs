@@ -1,4 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* 
+ * Project : TrackSpaceInvaders
+ * Authors : Fabian Troller / Guntram Juling / Raphaël Lopes
+ * Description : Space invaders controlled with head tracking(TrackIR) technology
+ * File : Game1.cs
+ * Date : 13.03.19
+ */
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -72,8 +79,6 @@ namespace TrackSpaceInvaders
             {
                 a.LoadContent(this.Content);
             }
-            //Laser.LoadContent(this.Content);
-            // TODO: use this.Content to load your game content here
         }
 
         /// <summary>
@@ -82,7 +87,7 @@ namespace TrackSpaceInvaders
         /// </summary>
         protected override void UnloadContent()
         {
-            // TODO: Unload any non ContentManager content here
+            //Intentionally blank
         }
 
         /// <summary>
@@ -174,7 +179,6 @@ namespace TrackSpaceInvaders
             }
             timeElapsed += gameTime.ElapsedGameTime;
             base.Update(gameTime);
-            //alien = new Alien(new Point(0,0));
 
 
         }
@@ -197,7 +201,6 @@ namespace TrackSpaceInvaders
             }
             else
                 Application.Restart();
-            //Thread.Sleep(10000);
         }
         /// <summary>
         /// This is called when the game should draw itself.
@@ -228,9 +231,6 @@ namespace TrackSpaceInvaders
                 laz.Move();
             }
             spriteBatch.End();
-
-            
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
             

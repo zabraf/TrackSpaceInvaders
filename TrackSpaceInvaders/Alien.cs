@@ -1,4 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿/* 
+ * Project : TrackSpaceInvaders
+ * Authors : Fabian Troller / Guntram Juling / Raphaël Lopes
+ * Description : Space invaders controlled with head tracking(TrackIR) technology
+ * File : Alien.cs
+ * Date : 13.03.19
+ */
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
@@ -14,7 +21,6 @@ namespace TrackSpaceInvaders
         Texture2D _texture;
         Game _game = new Game();
         Point _position;
-        //Point _size = new Point(70, 49);
         Point _size = new Point(70, 70);
         Vector2 _speed;
 

@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Project : TrackSpaceInvaders
+ * Authors : Fabian Troller / Guntram Juling / Raphaël Lopes
+ * Description : Space invaders controlled with head tracking(TrackIR) technology
+ * File : Trackir.cs
+ * Date : 13.03.19
+ */
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,12 +19,15 @@ namespace TrackSpaceInvaders
 {
     public static class TrackIR
     {
-        private const string FILE_PATH = @"http://127.0.0.1/test.txt";
+        private const string DATA_PATH = @"http://127.0.0.1/data.txt";
 
         private static Timer _aTimer;// the timer interval
         private static int _x = 0;
         private static int _y = 0;
         private static string[] _lines;
+        /// <summary>
+        /// Initializes the timer
+        /// </summary>
         public static void Init()
         {
             // Create a timer with a ten ms interval.
@@ -45,7 +55,7 @@ namespace TrackSpaceInvaders
                 string table;
                 using (WebClient client = new WebClient())
                 {
-                    table = client.DownloadString(FILE_PATH);
+                    table = client.DownloadString(DATA_PATH);
                 }
                 Lines = table.Split(',');// gets the data by spliting the result into x and y
                 Int32.TryParse(Lines[0], out _x);

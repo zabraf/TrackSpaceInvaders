@@ -1,4 +1,11 @@
-﻿using System;
+﻿/* 
+ * Project : TrackSpaceInvaders
+ * Authors : Fabian Troller / Guntram Juling / Raphaël Lopes
+ * Description : Space invaders controlled with head tracking(TrackIR) technology
+ * File : Program.cs
+ * Date : 13.03.19
+ */
+using System;
 
 namespace TrackSpaceInvaders
 {
