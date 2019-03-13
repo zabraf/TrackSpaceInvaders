@@ -18,53 +18,76 @@ namespace TrackSpaceInvaders
 {
     class Alien
     {
-        Texture2D _texture;
-        Game _game = new Game();
-        Point _position;
-        Point _size = new Point(70, 70);
-        Vector2 _speed;
+        private const int DEFAULT_SPEED = 1;
+        private const int MIN_X = 0;
 
+        Point _position;
 
         public Point Position { get => _position; private set => _position = value; }
-        public Point Size { get => _size; set => _size = value; }
-        public Vector2 Speed { get => _speed; set => _speed = value; }
+        public Point Size { get; set; } = new Point(70, 70);
+        public Vector2 Speed { get; set; }
+        public Texture2D Texture { get; set; }
+        public Game Game { get; set; } = new Game();
 
-        public Alien(Point position) : this(position, 1)
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="position"></param>
+        public Alien(Point position) : this(position, DEFAULT_SPEED)
         {
-
+            // Intentionally blank
         }
+        /// <summary>
+        /// Constructor with position and speed as parameters
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="speed"></param>
         public Alien(Point position, float speed)
         {
             this.Position = position;
-            this.Speed = new Vector2(speed, 0);
+            this.Speed = new Vector2(speed, 0);// 0 = don't move the Y
         }
-
+        /// <summary>
+        /// Loads the texture
+        /// </summary>
+        /// <param name="content"></param>
         public void LoadContent(ContentManager content)
         {
-            _texture = content.Load<Texture2D>("Sprite/Aliens_Vessel");
+            Texture = content.Load<Texture2D>("Sprite/Aliens_Vessel");
         }
+        /// <summary>
+        /// Updates the view
+        /// </summary>
+        /// <param name="spriteBatch"></param>
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_texture, new Rectangle(Position.X, Position.Y, Size.X, Size.Y), Color.White);
+            spriteBatch.Draw(Texture, new Rectangle(Position.X, Position.Y, Size.X, Size.Y), Color.White);
         }
-
+        /// <summary>
+        /// Moves the alien
+        /// </summary>
         public void Move()
         {
             Position = new Point(this.Position.X + Convert.ToInt32(Speed.X), this.Position.Y);
-            if (this.Position.X+Size.X >= _game.Window.ClientBounds.Width)
+            if (this.Position.X+Size.X >= Game.Window.ClientBounds.Width)// cannot set a const with the game screen width
             {
                 this.Down();
                 Speed = -Speed;
-                this._position.X = _game.Window.ClientBounds.Width - Size.X;
+                this._position.X = Game.Window.ClientBounds.Width - Size.X;
             }
-            if (this.Position.X <= 0)
+            if (this.Position.X <= MIN_X)
             {
                 this.Down();
                 Speed = -Speed;
-                this._position.X = 0;
+                this._position.X = MIN_X;
             }
 
         }
+        /// <summary>
+        /// Checks the collision with the player
+        /// </summary>
+        /// <param name="players"></param>
+        /// <param name="aliens"></param>
         public static void CheckPlayer(List<Player> players, List<Alien> aliens)
         {
 
@@ -85,11 +108,18 @@ namespace TrackSpaceInvaders
                 }
             }
         }
+        /// <summary>
+        /// Moves downwards
+        /// </summary>
         public void Down()
         {
             Position = new Point(this.Position.X, this.Position.Y + Size.Y);
         }
-        
+        /// <summary>
+        /// Shoots a laser
+        /// </summary>
+        /// <param name="content"></param>
+        /// <returns></returns>
         public Laser Shoot(ContentManager content)
         {
             Laser alienLaz = new Laser(new Point(this.Position.X + (Size.X / 2), this.Position.Y), 4, false, Origin.Alien);

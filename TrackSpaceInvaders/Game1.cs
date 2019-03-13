@@ -21,33 +21,36 @@ namespace TrackSpaceInvaders
     /// </summary>
     public class Game1 : Game
     {
-        const int PITCH_LIMIT = 300;
-        const int YAW_LIMIT = 200;
-        const int DEFAULT_POS_X = 0;
-        const int DEFAULT_POS_Y = 450;
-        const int DEFAULT_PLAYER_SPEED = 5;
-        private const int COOLDOWN_SHOT = 1000;
+        private const int PITCH_LIMIT = 300;
+        private const int YAW_LIMIT = 200;
+        private const int DEFAULT_POS_Y = 400;
+        private const int DEFAULT_PLAYER_SPEED = 5;
+        private const int COOLDOWN_SHOT_PLAYER = 1000;
         private const int COOLDOWN_SHOT_ALIEN = 3500;
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        List<Player> players = new List<Player>();
-        List<Alien> aliens = new List<Alien>();
-        TimeSpan timeElapsed = new TimeSpan();
-        List<Laser> lazPlayer = new List<Laser>();
-        List<Laser> lazAliens = new List<Laser>();
-        static Random rnd = new Random(); 
 
-        bool spawnDone = false;
-        int alienPreWaveAmount = 30;// amount of enemies that will pre-spawn 40
-        int shootCD;
-        int AliensShootCD;
-        int gameWidth = DEFAULT_POS_X;
+        public bool SpawnDone { get; set; } = false;
+        public int AlienPreWaveAmount { get; set; } = 30;
+        public int PlayerShootCD { get; set; }
+        public int AliensShootCD { get; set; }
+        public int GameWidth { get; set; }
+        public static Random Rand { get; set; } = new Random();
+        internal List<Laser> AlienLasers { get; set; } = new List<Laser>();
+        internal List<Laser> PlayerLasers { get; set; } = new List<Laser>();
+        public TimeSpan TimeElapsed { get; set; } = new TimeSpan();
+        internal List<Alien> Aliens { get; set; } = new List<Alien>();
+        internal List<Player> Players { get; set; } = new List<Player>();
+        public SpriteBatch SpriteBatch { get; set; }
+        public GraphicsDeviceManager Graphics { get; }
+
+        /// <summary>
+        /// Default game constructor
+        /// </summary>
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
+            Graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            gameWidth = this.Window.ClientBounds.Width;
-           graphics.ToggleFullScreen();
+            GameWidth = this.Window.ClientBounds.Width;
+            //graphics.ToggleFullScreen();
             TrackIR.Init();
         }
 
@@ -70,12 +73,12 @@ namespace TrackSpaceInvaders
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            foreach (Player p in players)
+            SpriteBatch = new SpriteBatch(GraphicsDevice);
+            foreach (Player p in Players)
             {
                 p.LoadContent(this.Content);
             }
-            foreach (Alien a in aliens)
+            foreach (Alien a in Aliens)
             {
                 a.LoadContent(this.Content);
             }
@@ -87,7 +90,7 @@ namespace TrackSpaceInvaders
         /// </summary>
         protected override void UnloadContent()
         {
-            //Intentionally blank
+            // Intentionally blank
         }
 
         /// <summary>
@@ -97,91 +100,94 @@ namespace TrackSpaceInvaders
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (aliens.Count == 0 && spawnDone)// if no more aliens alive and the spawn is done
+            if (Aliens.Count == 0 && SpawnDone)// if no more aliens alive and the spawn is done
             {
                 Win();
             }
-            if (players.Count == 0 && spawnDone)// if no more players alive and the spawn is done
+            if (Players.Count == 0 && SpawnDone)// if no more players alive and the spawn is done
             {
                 Lose();
             }
-            shootCD += gameTime.ElapsedGameTime.Milliseconds;
+            // increment cooldown timers
+            PlayerShootCD += gameTime.ElapsedGameTime.Milliseconds;
             AliensShootCD += gameTime.ElapsedGameTime.Milliseconds;
-            
-
-            if (AliensShootCD >= COOLDOWN_SHOT_ALIEN + rnd.Next((COOLDOWN_SHOT_ALIEN / 100) * 1, (COOLDOWN_SHOT_ALIEN / 100) * 40))
+            // handle alien shoot cooldown
+            if (AliensShootCD >= COOLDOWN_SHOT_ALIEN + Rand.Next((COOLDOWN_SHOT_ALIEN / 100) * 1, (COOLDOWN_SHOT_ALIEN / 100) * 40))
             {
                 Console.WriteLine(AliensShootCD);
-                lazAliens.Add(aliens[rnd.Next(0, aliens.Count)].Shoot(this.Content));
+                AlienLasers.Add(Aliens[Rand.Next(0, Aliens.Count)].Shoot(this.Content));
                 AliensShootCD = 0;
             }
-
+            // if the user presses escape or back, close the game
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) || TrackIR.X > YAW_LIMIT)
+            // player controls with keyboard
+            // move left
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) || TrackIR.Yaw > YAW_LIMIT)
             {
-                foreach (Player p in players)
+                foreach (Player p in Players)
                 {
                     p.MoveLeft();
                 }
             }
-
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) || TrackIR.X < -YAW_LIMIT)
+            // move right
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) || TrackIR.Yaw < -YAW_LIMIT)
             {
-                foreach (Player p in players)
+                foreach (Player p in Players)
                 {
                     p.MoveRight();
                 }
             }
-
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) || TrackIR.Y < -PITCH_LIMIT)
+            // shoot laser
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) || TrackIR.Pitch < -PITCH_LIMIT)
             {
-                if (shootCD>= COOLDOWN_SHOT)
+                // player shoot cooldown
+                if (PlayerShootCD >= COOLDOWN_SHOT_PLAYER)
                 {
-                    foreach (Player p in players)
+                    foreach (Player p in Players)
                     {
-                        lazPlayer.Add(p.Shoot(this.Content));
+                        PlayerLasers.Add(p.Shoot(this.Content));
                     }
                     
-                    shootCD = 0;
+                    PlayerShootCD = 0;
                 }
             }
-            if (timeElapsed.Milliseconds >= 2)
+            // check collisions
+            Laser.CheckLazPlayer(PlayerLasers, Aliens);
+            Laser.CheckLazAliens(AlienLasers, Players);
+            Alien.CheckPlayer(Players, Aliens);
+            // handle alien movement
+            foreach (Alien a in Aliens)
             {
-                timeElapsed -= new TimeSpan(0,0,0,0,2);
-                Laser.CheckLazPlayer(lazPlayer, aliens);
-                Laser.CheckLazAliens(lazAliens, players);
-                Alien.CheckPlayer(players, aliens);
-                foreach (Alien a in aliens)
+                a.Move();
+            }
+            // makes the game spawn aliens and the player
+            if (AlienPreWaveAmount != Aliens.Count && !SpawnDone)
+            {
+                Alien a = new Alien(new Point(0, 0));
+                a.LoadContent(this.Content);
+                Aliens.Add(a);
+                // each alien moves aside to make space for the next alien
+                for (int i = 0; i < Aliens.Count*70; i++)
                 {
                     a.Move();
                 }
-                if (alienPreWaveAmount != aliens.Count && !spawnDone)
+                // once the aliens spawned, spawn the player
+                if (AlienPreWaveAmount == Aliens.Count)
                 {
-                    Alien a = new Alien(new Point(0, 0));
-                    a.LoadContent(this.Content);
-                    aliens.Add(a);
-                    for (int i = 0; i < aliens.Count*70; i++)
-                    {
-                        a.Move();
-                    }
-                    if (alienPreWaveAmount == aliens.Count)
-                    {
-                        Player p = new Player(this, new Point(gameWidth/2-new Player(this,0,0).Size.X/2, DEFAULT_POS_Y), DEFAULT_PLAYER_SPEED);
-                        players.Add(p);
-                        p.LoadContent(this.Content);
-                        spawnDone = true;
-                    }
+                    Player p = new Player(this, new Point(GameWidth/2-new Player(this,0,0).Size.X/2, DEFAULT_POS_Y), DEFAULT_PLAYER_SPEED);
+                    Players.Add(p);
+                    p.LoadContent(this.Content);
+                    SpawnDone = true;// tell the game the spawn is done
                 }
             }
-            timeElapsed += gameTime.ElapsedGameTime;
+            TimeElapsed += gameTime.ElapsedGameTime;
             base.Update(gameTime);
-
-
         }
+        /// <summary>
+        /// If the player wins, asks if the game has to restart or close
+        /// </summary>
         private void Win()
         {
 
@@ -192,6 +198,9 @@ namespace TrackSpaceInvaders
             else
                 Application.Restart();
         }
+        /// <summary>
+        /// If the player loses, asks if the game has to restart or close
+        /// </summary>
         private void Lose()
         {
 
@@ -203,38 +212,35 @@ namespace TrackSpaceInvaders
                 Application.Restart();
         }
         /// <summary>
-        /// This is called when the game should draw itself.
+        /// Updates the view
         /// </summary>
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.Black);
-            
          
-            spriteBatch.Begin();
-            foreach (Player p in players)
+            SpriteBatch.Begin();
+            foreach (Player p in Players)
             {
-                p.Draw(spriteBatch);
+                p.Draw(SpriteBatch);
             }
-            foreach (Alien a in aliens)
+            foreach (Alien a in Aliens)
             {
-                a.Draw(spriteBatch);
+                a.Draw(SpriteBatch);
             }
-            foreach (Laser laz in lazPlayer)
+            foreach (Laser laz in PlayerLasers)
             {
-                laz.Draw(spriteBatch);
+                laz.Draw(SpriteBatch);
                 laz.Move();
             }
-            foreach (Laser laz in lazAliens)
+            foreach (Laser laz in AlienLasers)
             {
-                laz.Draw(spriteBatch);
+                laz.Draw(SpriteBatch);
                 laz.Move();
             }
-            spriteBatch.End();
+            SpriteBatch.End();
 
             base.Draw(gameTime);
-            
-
         }
     }
 }

@@ -19,12 +19,15 @@ namespace TrackSpaceInvaders
 {
     public static class TrackIR
     {
-        private const string DATA_PATH = @"http://127.0.0.1/data.txt";
+        private const string DATA_PATH = @"http://127.0.0.1/data.txt";// link to the data of the server
+        private static int _yaw = 0;
+        private static int _pitch = 0;
 
-        private static Timer _aTimer;// the timer interval
-        private static int _x = 0;
-        private static int _y = 0;
-        private static string[] _lines;
+        public static Timer ATimer { get; set; }
+        public static int Yaw { get => _yaw; private set => _yaw = value; }
+        public static int Pitch { get => _pitch; private set => _pitch = value; }
+        public static string[] Lines { get; set; }
+
         /// <summary>
         /// Initializes the timer
         /// </summary>
@@ -38,11 +41,6 @@ namespace TrackSpaceInvaders
             ATimer.Enabled = true;
         }
 
-        public static Timer ATimer { get => _aTimer; set => _aTimer = value; }
-        public static int X { get => _x; private set => _x = value; }
-        public static int Y { get => _y; private set => _y = value; }
-        public static string[] Lines { get => _lines; set => _lines = value; }
-
         /// <summary>
         /// Gets the data from the server
         /// </summary>
@@ -55,11 +53,12 @@ namespace TrackSpaceInvaders
                 string table;
                 using (WebClient client = new WebClient())
                 {
-                    table = client.DownloadString(DATA_PATH);
+                    table = client.DownloadString(DATA_PATH);//store data from server into table
+                    client.Dispose();
                 }
-                Lines = table.Split(',');// gets the data by spliting the result into x and y
-                Int32.TryParse(Lines[0], out _x);
-                Int32.TryParse(Lines[1], out _y);
+                Lines = table.Split(',');// gets the data by spliting the result into Yaw and Pitch
+                Int32.TryParse(Lines[0], out _yaw);
+                Int32.TryParse(Lines[1], out _pitch);
             }
             catch (Exception exception)
             {
