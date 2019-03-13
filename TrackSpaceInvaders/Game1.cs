@@ -14,21 +14,21 @@ namespace TrackSpaceInvaders
     /// </summary>
     public class Game1 : Game
     {
+        const int PITCH_LIMIT = 300;
+        const int YAW_LIMIT = 200;
         const int DEFAULT_POS_X = 0;
-        const int DEFAULT_POS_Y = 350;
+        const int DEFAULT_POS_Y = 450;
         const int DEFAULT_PLAYER_SPEED = 5;
         private const int COOLDOWN_SHOT = 1000;
         private const int COOLDOWN_SHOT_ALIEN = 3500;
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         List<Player> players = new List<Player>();
-        //Alien alien;
         List<Alien> aliens = new List<Alien>();
         TimeSpan timeElapsed = new TimeSpan();
         List<Laser> lazPlayer = new List<Laser>();
         List<Laser> lazAliens = new List<Laser>();
-        static Random rnd = new Random();
-        //Point gameSize;
+        static Random rnd = new Random(); 
 
         bool spawnDone = false;
         int alienPreWaveAmount = 30;// amount of enemies that will pre-spawn 40
@@ -37,10 +37,10 @@ namespace TrackSpaceInvaders
         int gameWidth = DEFAULT_POS_X;
         public Game1()
         {
-            this.Window.AllowAltF4 = false;
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             gameWidth = this.Window.ClientBounds.Width;
+           graphics.ToggleFullScreen();
             TrackIR.Init();
         }
 
@@ -52,7 +52,6 @@ namespace TrackSpaceInvaders
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -116,7 +115,7 @@ namespace TrackSpaceInvaders
                 Exit();
 
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Left) || TrackIR.X > 400)
+            if (Keyboard.GetState().IsKeyDown(Keys.Left) || TrackIR.X > YAW_LIMIT)
             {
                 foreach (Player p in players)
                 {
@@ -125,7 +124,7 @@ namespace TrackSpaceInvaders
             }
 
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Right) || TrackIR.X < -400)
+            if (Keyboard.GetState().IsKeyDown(Keys.Right) || TrackIR.X < -YAW_LIMIT)
             {
                 foreach (Player p in players)
                 {
@@ -133,7 +132,7 @@ namespace TrackSpaceInvaders
                 }
             }
 
-            if (Keyboard.GetState().IsKeyDown(Keys.Space) || TrackIR.Y < -300)
+            if (Keyboard.GetState().IsKeyDown(Keys.Space) || TrackIR.Y < -PITCH_LIMIT)
             {
                 if (shootCD>= COOLDOWN_SHOT)
                 {
@@ -145,7 +144,6 @@ namespace TrackSpaceInvaders
                     shootCD = 0;
                 }
             }
-            // TODO: Add your update logic here
             if (timeElapsed.Milliseconds >= 2)
             {
                 timeElapsed -= new TimeSpan(0,0,0,0,2);
@@ -189,16 +187,10 @@ namespace TrackSpaceInvaders
             }
             else
                 Application.Restart();
-
-            //this.graphics.GraphicsDevice.Clear(Color.Black);
-            //this.spriteBatch.Draw(new Texture2D(this.GraphicsDevice, 10, 10), new Rectangle(), Color.White);
-            //Thread.Sleep(10000);
-            //Exit();
         }
         private void Lose()
         {
-            //this.graphics.GraphicsDevice.Clear(Color.Black);
-            //this.spriteBatch.Draw(new Texture2D(this.GraphicsDevice, 10, 10), new Rectangle(), Color.White);
+
             if (System.Windows.Forms.MessageBox.Show("Voulez-vous recommencez le jeu ?", "Echec", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 Exit();
